@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:3333
+
+# @name register
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "johnjohn"
+}
+
+###
+
+# @name authenticate
+POST {{baseUrl}}/auth
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "johnjohn"
+}
+
+###
+
+# @name forget_password
+POST {{baseUrl}}/forget_password
+Content-Type: application/json
+
+{
+  "email": "john@example.com"
+}
+
+###
+
+# @name restore
+PATCH {{baseUrl}}/restore-password?email=john@example.com
+Content-Type: application/json
+
+{
+  "password": "john_node2"
+}
+
+###
+
+# @name restore
+GET {{baseUrl}}/user?email=john@example.com
