@@ -23,6 +23,12 @@ Content-Type: application/json
 
 ###
 
+# @name profile
+GET {{baseUrl}}/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJzdWIiOiI0NTI1Njg0Yy1mNjNhLTRiY2YtYWIzYS1hOTc4ZWNmYWI2MDciLCJpYXQiOjE3MDc4Mjk1ODZ9.lg1jXejOKytDnctuR4a6NdwIBQDrIrBqrcVs3vllLuE
+
+###
+
 # @name forget_password
 POST {{baseUrl}}/forget_password
 Content-Type: application/json

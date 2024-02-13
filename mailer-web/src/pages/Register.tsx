@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRegister } from "@/hooks/useRegister";
 
+import { useNavigate } from 'react-router-dom'
+
 const registerSchema = z.object({
   name: z.string().min(1, 'The name cannot be empty!'),
   email: z.string().email('Invalid form.'),
@@ -15,6 +17,8 @@ const registerSchema = z.object({
 export type RegisterInformData = z.infer<typeof registerSchema>
 
 export function Register() {
+  const navigate = useNavigate()
+
   const { handleSubmit, register, formState: { errors } } = useForm<RegisterInformData>({
     resolver: zodResolver(registerSchema)
   })
@@ -22,7 +26,14 @@ export function Register() {
   const { mutateAsync: registerFn } = useRegister()
 
   async function handleRegister(data: RegisterInformData) {
-    await registerFn(data)
+    const { email, name, password } = data
+
+    try {
+      await registerFn({ email, name, password })
+      navigate('/auth')
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -34,11 +45,13 @@ export function Register() {
           <Input type="text" id="name" {...register('name')} />
           {errors.name && <span className="nottext-red-500">{errors.name.message}</span>}
         </div>
+
         <div className="notw-full">
           <label htmlFor="email">Email:</label>
           <Input type="email" id="email" {...register('email')} />
           {errors.email && <span className="nottext-red-500">{errors.email.message}</span>}
         </div>
+
         <div className="notw-full">
           <label htmlFor="password">Password:</label>
           <Input type="password" id="password" {...register('password')} />
