@@ -1,10 +1,13 @@
 import { Entity } from "../../core/entities/entity.ts"
 import { UniqueEntityId } from "../../core/entities/unique-entity-id.ts"
 
+export type Role = 'user' | 'admin'
+
 interface UserProps {
   name: string
   email: string
   password: string
+  role?: Role
   createdAt?: Date
   updatedAt?: Date
 }
@@ -27,6 +30,10 @@ export class User extends Entity<UserProps> {
     this.touch()
   }
 
+  get role() {
+    return this.props.role
+  }
+
   get createdAt() {
     return this.props.createdAt
   }
@@ -42,6 +49,7 @@ export class User extends Entity<UserProps> {
   static create(props: UserProps, id?: UniqueEntityId) {
     return new User({
       ...props,
+      role: props.role ?? 'user',
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date()
     }, id)

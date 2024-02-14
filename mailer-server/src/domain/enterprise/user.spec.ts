@@ -13,6 +13,14 @@ describe('User Entity', () => {
     })
   })
 
+  it ('should be able to receive a default role', () => {
+    const user = makeUser({}, new UniqueEntityId('user-test'))
+
+    expect(user).toMatchObject({
+      role: 'user'
+    })
+  })
+
   it ('should be able to get all user props', () => {
     const user = makeUser({}, new UniqueEntityId('user-test'))
 
@@ -21,6 +29,7 @@ describe('User Entity', () => {
       name: user.name,
       email: user.email,
       password: user.password,
+      role: user.role,
       createdAt: expect.any(Date),
       updatedAt: expect.any(Date)
     })

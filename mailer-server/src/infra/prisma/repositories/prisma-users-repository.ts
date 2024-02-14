@@ -1,7 +1,7 @@
-import { UsersRepository } from "../../../domain/app/repositories/users-repository.ts";
-import { User } from "../../../domain/enterprise/user.ts";
-import { prisma } from "../../lib/prisma.ts";
-import { PrismaUserMapper } from "../mappers/prisma-user-mapper.ts";
+import { UsersRepository } from "@/domain/app/repositories/users-repository.ts"
+import { prisma } from "@/infra/lib/prisma.ts"
+import { User } from "@/domain/enterprise/user.ts"
+import { PrismaUserMapper } from "../mappers/prisma-user-mapper.ts"
 
 export class PrismaUsersRepository implements UsersRepository {
   async findByEmail(email: string) {

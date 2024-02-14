@@ -1,4 +1,4 @@
-import { User } from "../../enterprise/user.ts"
+import { User } from "@/domain/enterprise/user.ts"
 
 export interface UsersRepository {
   findByEmail: (email: string) => Promise<User | null>
