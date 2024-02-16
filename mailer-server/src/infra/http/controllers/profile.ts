@@ -11,8 +11,7 @@ export async function profile(app: FastifyInstance) {
 
     if (result.isLeft()) {
       const error = result.value
-
-      throw new BadRequestException(error.message)
+      return res.status(400).send({ type: 'BadRequestException', message: error.message })
     }
 
     const user = UserPresenter.toHTTP(result.value.user)

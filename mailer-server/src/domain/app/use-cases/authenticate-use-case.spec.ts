@@ -5,16 +5,20 @@ import { makeUser } from 'test/factories/make-user.ts'
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter.ts'
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repository.ts'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id.ts'
+import { FakeHasher } from 'test/cryptography/fake-hashser.ts'
+import { WrongCredentialsError } from '../errors/wrong-credentials-error.ts'
 
 let usersRepository: InMemoryUsersRepository
 let fakeEncrypter: FakeEncrypter
+let fakeHasher: FakeHasher
 let sut: AuthenticateUseCase
 
 describe('Authenticate use case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     fakeEncrypter = new FakeEncrypter()
-    sut = new AuthenticateUseCase(usersRepository, fakeEncrypter)
+    fakeHasher = new FakeHasher()
+    sut = new AuthenticateUseCase(usersRepository, fakeEncrypter, fakeHasher)
   })
 
   it('should not be able to authenticate a user with different email', async () => {
@@ -24,9 +28,9 @@ describe('Authenticate use case', () => {
     const result = await sut.execute({ email: 'invalid-email', password: user.password })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+    expect(result.value).toBeInstanceOf(WrongCredentialsError)
     expect(result.value).toMatchObject({
-      message: 'Resource not found.'
+      message: 'Credentials are not valid.'
     })
   })
 
@@ -38,9 +42,9 @@ describe('Authenticate use case', () => {
     const result = await sut.execute({ email: user.email, password: 'password-not-existing' })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+    expect(result.value).toBeInstanceOf(WrongCredentialsError)
     expect(result.value).toMatchObject({
-      message: 'Resource not found.'
+      message: 'Credentials are not valid.'
     })
   })
 
@@ -50,9 +54,11 @@ describe('Authenticate use case', () => {
 
     const result = await sut.execute({ email: user.email, password: user.password })
 
+    const expectedPayload = '{"sub":"testing","role":"user"}'
+
     expect(result.isRight()).toBe(true)
     expect(result.value).toMatchObject({
-      token: '{"sub":"testing","name":"John Doe","email":"john@example.com"}',
+      token: expectedPayload,
     })
   })
 })

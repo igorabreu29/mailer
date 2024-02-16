@@ -1,4 +1,4 @@
-export class WrongCredentialsException extends Error {
+export class UnauthorizedException extends Error {
   public statusCode: number = 0
   public type: string = ''
   public message: string = ''
@@ -6,7 +6,7 @@ export class WrongCredentialsException extends Error {
   constructor(message: string) {
     super()
     this.statusCode = 400
-    this.type = 'WrongCredentialsException'
+    this.type = 'UnauthorizedException'
     this.message = message
   }
 }

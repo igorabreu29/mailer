@@ -1,40 +1,41 @@
 import { Either, left, right } from "@/core/either.ts"
 import { JWTEncrypter } from "../cryptography/jwt-encrypter.ts"
-import { ResourceNotFoundError } from "../errors/resource-not-found-error.ts"
 import { UsersRepository } from "../repositories/users-repository.ts"
+import { WrongCredentialsError } from "../errors/wrong-credentials-error.ts"
+import { Hasher } from "../cryptography/hasher.ts"
 
 interface AuthenticateUseCaseRequest {
   email: string
   password: string
 }
 
-type AuthenticateUseCaseResponse = Either<ResourceNotFoundError, {
+type AuthenticateUseCaseResponse = Either<WrongCredentialsError, {
   token: string
 }>
 
 export class AuthenticateUseCase {
   constructor(
     private usersRepository: UsersRepository,
-    private jwtEncrypter: JWTEncrypter
+    private jwtEncrypter: JWTEncrypter,
+    private hasher: Hasher
   ) {}
 
   async execute({ email, password }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
     const userExist = await this.usersRepository.findByEmail(email)
 
     if (!userExist) {
-      return left(new ResourceNotFoundError())
+      return left(new WrongCredentialsError())
     }
 
-    const isValidPassword = userExist.password === password
+    const isValidPassword = await this.hasher.compare(password, userExist.password)
 
     if (!isValidPassword) {
-      return left(new ResourceNotFoundError())
+      return left(new WrongCredentialsError())
     } 
 
     const token = this.jwtEncrypter.encrypt({
       sub: userExist.id.toValue(),
-      name: userExist.name,
-      email: userExist.email,
+      role: userExist.role
     })
 
     return right({

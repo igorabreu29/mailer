@@ -4,6 +4,13 @@ import { Note } from "@/domain/enterprise/note.ts";
 export class InMemoryNotesRepository implements NotesRepository {
   public notes: Note[] = []
 
+  async findById(id: string) {
+    const note = this.notes.find(note => note.id.toValue() === id)
+
+    if (!note) return null
+    return note
+  }
+
   async findManyByAuthorId(authorId: string, page: number) {
     const notes = this.notes
       .filter(note => note.authorId.toValue() === authorId)
@@ -18,5 +25,10 @@ export class InMemoryNotesRepository implements NotesRepository {
   async create(note: Note) {
     this.notes.push(note)
     return note
+  }
+
+  async delete(id: string) {
+    const noteIndex = this.notes.findIndex(note => note.id.toValue() === id)
+    this.notes.splice(noteIndex, 1)
   }
 }

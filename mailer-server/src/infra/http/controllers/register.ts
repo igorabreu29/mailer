@@ -18,8 +18,7 @@ export async function register(app: FastifyInstance) {
 
     if (result.isLeft()) {
       const error = result.value
-
-      throw new BadRequestException(error.message)
+      return res.status(400).send({ type: 'BadRequestException', message: error.message })
     }
 
     return res.status(201).send()

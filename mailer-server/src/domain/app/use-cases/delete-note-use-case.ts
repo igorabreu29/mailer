@@ -26,6 +26,8 @@ export class DeleteNoteUseCase {
       return left(new ConflictBetweenUsersError())
     }
 
+    await this.notesRepository.delete(id)
+
     return right(null)
   } 
 }

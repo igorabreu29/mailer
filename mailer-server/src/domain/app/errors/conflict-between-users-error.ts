@@ -1,5 +1,5 @@
 export class ConflictBetweenUsersError extends Error {
   constructor() {
-    super('Conflict between resource of user.')
+    super("Conflict! User don't have permission to access.")
   }
 }

@@ -3,14 +3,17 @@ import { InMemoryUsersRepository } from 'test/repositories/in-memory-users-repos
 import { UserAlreadyExistError } from '../errors/user-already-exist-error.ts'
 import { RegisterUseCase } from './register-use-case.ts'
 import { makeUser } from 'test/factories/make-user.ts'
+import { FakeHasher } from 'test/cryptography/fake-hashser.ts'
 
 let usersRepository: InMemoryUsersRepository
+let hasher: FakeHasher
 let sut: RegisterUseCase
 
 describe('Register use case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
-    sut = new RegisterUseCase(usersRepository)
+    hasher = new FakeHasher()
+    sut = new RegisterUseCase(usersRepository, hasher)
   })
 
   it('should not be able to register a user who already exist', async () => {
@@ -27,6 +30,7 @@ describe('Register use case', () => {
 
   it('should be able to register a user', async () => {
     const user = makeUser()
+    expect(user.password).toEqual('johnjohn')
 
     const result = await sut.execute({ name: user.name, email: user.email, password: user.password })
 
@@ -37,7 +41,7 @@ describe('Register use case', () => {
       },
       name: user.name,
       email: user.email,
-      password: user.password,
+      password: expect.any(String)
     })
     expect(result.value).toBeNull()
   })

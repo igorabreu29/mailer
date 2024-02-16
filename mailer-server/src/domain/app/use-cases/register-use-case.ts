@@ -2,6 +2,7 @@ import { Either, left, right } from "@/core/either.ts"
 import { User } from "@/domain/enterprise/user.ts"
 import { UserAlreadyExistError } from "../errors/user-already-exist-error.ts"
 import { UsersRepository } from "../repositories/users-repository.ts"
+import { Hasher } from "../cryptography/hasher.ts"
 
 interface RegisterUseCaseRequest {
   name: string
@@ -13,7 +14,8 @@ type RegisterUseCaseResponse = Either<UserAlreadyExistError, null>
 
 export class RegisterUseCase {
   constructor(
-    private usersRepository: UsersRepository
+    private usersRepository: UsersRepository,
+    private hasher: Hasher
   ) {}
 
   async execute({ email, name, password }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
@@ -23,7 +25,8 @@ export class RegisterUseCase {
       return left(new UserAlreadyExistError())
     }
 
-    const user = User.create({ email, name, password })
+    const passwordHash = await this.hasher.hash(password)
+    const user = User.create({ email, name, password: passwordHash })
 
     await this.usersRepository.create(user)
 

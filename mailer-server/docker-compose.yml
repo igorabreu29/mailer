@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  postgresql:
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=mailers
+    volumes:
+      - mailers_pg_data:/bitnami/postgresql
+
+volumes:
+  mailers_pg_data:

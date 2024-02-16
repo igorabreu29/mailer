@@ -25,7 +25,7 @@ Content-Type: application/json
 
 # @name profile
 GET {{baseUrl}}/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5AZXhhbXBsZS5jb20iLCJzdWIiOiJiODE2MWU2Mi05N2JhLTRkNTMtODUxZC1iYjVjNThiZGRjNDUiLCJpYXQiOjE3MDc4NjY3MTMsImV4cCI6MTcwNzg2NzMxM30.vah6Jqp1qbUupokahswl70w3F8XVirJEUG_UgIqYBoc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsInN1YiI6IjgwYTc0MTViLWVlNjEtNGI5MC1hYzllLTkyOWYyMWNjM2U5OSIsImlhdCI6MTcwODAxMDc4NiwiZXhwIjoxNzA4MDExMzg2fQ.JdogDQoMzzXSeSnWeBTRL8WWcjKfcHe6DcYVqeNjUUc
 
 ###
 
@@ -51,3 +51,20 @@ Content-Type: application/json
 
 # @name restore
 GET {{baseUrl}}/user?email=john@example.com
+
+###
+
+# @name fetch_notes
+GET {{baseUrl}}/notes?page=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsInN1YiI6IjgwYTc0MTViLWVlNjEtNGI5MC1hYzllLTkyOWYyMWNjM2U5OSIsImlhdCI6MTcwODAxMDc4NiwiZXhwIjoxNzA4MDExMzg2fQ.JdogDQoMzzXSeSnWeBTRL8WWcjKfcHe6DcYVqeNjUUc
+
+###
+
+# @name create_note
+POST {{baseUrl}}/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsInN1YiI6IjgwYTc0MTViLWVlNjEtNGI5MC1hYzllLTkyOWYyMWNjM2U5OSIsImlhdCI6MTcwODAxMDc4NiwiZXhwIjoxNzA4MDExMzg2fQ.JdogDQoMzzXSeSnWeBTRL8WWcjKfcHe6DcYVqeNjUUc
+
+{
+  "content": "new note 3"
+}

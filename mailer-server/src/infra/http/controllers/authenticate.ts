@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { makeAuthenticateUseCase } from "../../factories/make-authenticate-use-case.ts"
-import { WrongCredentialsException } from "../../errors/wrong-credentials-exception.ts"
+import { WrongCredentialsError } from "@/domain/app/errors/wrong-credentials-error.ts"
 
 export async function authenticate(app: FastifyInstance) {
   app.post('/auth', async (req, res) => {
@@ -18,7 +18,12 @@ export async function authenticate(app: FastifyInstance) {
     if (result.isLeft()) {
       const error = result.value
 
-      throw new WrongCredentialsException(error.message)
+      switch(error.constructor) {
+        case WrongCredentialsError: 
+          return res.status(400).send({ type: 'UnauthorizedException', message: error.message })
+        default: 
+          return res.status(400).send({ type: 'BadRequestException', message: error.message })
+      }
     }
 
     const { token } = result.value

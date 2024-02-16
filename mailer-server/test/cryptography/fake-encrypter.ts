@@ -1,4 +1,4 @@
-import { JWTEncrypter } from "../../src/domain/app/cryptography/jwt-encrypter.ts";
+import { JWTEncrypter } from "@/domain/app/cryptography/jwt-encrypter.ts";
 
 export class FakeEncrypter implements JWTEncrypter {
   encrypt(payload: Record<string, unknown>) {
