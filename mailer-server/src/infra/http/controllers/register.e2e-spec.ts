@@ -1,6 +1,7 @@
 import { app } from '@/app.ts'
+import { describe, it, beforeAll, afterAll } from 'vitest'
+
 import request from 'supertest'
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 
 describe('Register (e2e)', () => {
   beforeAll(async () => {

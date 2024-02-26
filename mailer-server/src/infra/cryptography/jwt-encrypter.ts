@@ -7,7 +7,7 @@ export class Encrypter implements JWTEncrypter {
       role: payload.role
     }, {
       sub: payload.sub as string,
-      expiresIn: '10m'
+      expiresIn: '7d'
     })
 
     return token

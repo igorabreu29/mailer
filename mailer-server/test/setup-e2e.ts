@@ -1,10 +1,13 @@
-import 'dotenv/config'
+import { config } from 'dotenv'
 
 import { randomUUID } from 'node:crypto'
 import { execSync } from 'node:child_process'
 
 import { afterAll, beforeAll } from 'vitest'
 import { PrismaClient } from '@prisma/client'
+
+config({ path: '.env.test', override: true })
+config({ path: '.env', override: true })  
 
 const prisma = new PrismaClient()
 
@@ -15,7 +18,6 @@ function generateDatabaseURL(schema: string) {
 
   const url = new URL(process.env.DATABASE_URL)
   url.searchParams.set('schema', schema)
-  console.log(url)
 
   return url.toString()
 }
@@ -30,8 +32,8 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  console.log(process.env.DATABASE_URL)
-  
-  await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`)
+  await prisma.$executeRawUnsafe(`
+    DROP SCHEMA IF EXISTS "${schema}" CASCADE`
+  )
   await prisma.$disconnect()
 })

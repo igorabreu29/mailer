@@ -17,7 +17,7 @@ app.register(cors, {
   origin: true
 })
 app.register(jwt, {
-  secret: 'impossible-discover-that-key'
+  secret: 'impossible-discover-this-key'
 })
 
 //Routes

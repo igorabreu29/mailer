@@ -1,7 +1,6 @@
 import { FastifyInstance } from "fastify";
 import z from "zod";
 import { makeRegisterUseCase } from "../../factories/make-register-use-case.ts";
-import { BadRequestException } from "../../errors/bad-request-exception.ts";
 
 export async function register(app: FastifyInstance) {
   app.post('/register', async (req, res) => {
